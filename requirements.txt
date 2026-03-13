@@ -1,0 +1,7 @@
+fastapi==0.109.0
+uvicorn==0.27.0
+python-dateutil==2.8.2
+pytz==2024.1
+httpx==0.26.0
+sxtwl==2.0.7
+python-dotenv==1.0.0
