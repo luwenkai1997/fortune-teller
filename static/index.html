@@ -4,206 +4,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>算命机器人</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', sans-serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            min-height: 100vh;
-            padding: 20px;
-            color: #fff;
-        }
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        h1 {
-            text-align: center;
-            margin-bottom: 30px;
-            font-size: 2em;
-            color: #f0e68c;
-        }
-        .form-card {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-            padding: 24px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-            color: #ccc;
-        }
-        input, select {
-            width: 100%;
-            padding: 12px 16px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 8px;
-            background: rgba(0, 0, 0, 0.3);
-            color: #fff;
-            font-size: 16px;
-        }
-        input:focus, select:focus {
-            outline: none;
-            border-color: #f0e68c;
-        }
-        select option {
-            background: #1a1a2e;
-        }
-        .btn {
-            width: 100%;
-            padding: 14px;
-            background: linear-gradient(135deg, #f0e68c 0%, #daa520 100%);
-            border: none;
-            border-radius: 8px;
-            color: #1a1a2e;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(240, 230, 140, 0.3);
-        }
-        .btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-        .result-card {
-            margin-top: 24px;
-            background: rgba(255, 255, 255, 0.08);
-            border-radius: 16px;
-            padding: 24px;
-            display: none;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        .result-card.show {
-            display: block;
-            animation: fadeIn 0.5s;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .result-title {
-            font-size: 1.2em;
-            margin-bottom: 16px;
-            color: #f0e68c;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            padding-bottom: 12px;
-        }
-        .bazi-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-        .bazi-item {
-            text-align: center;
-            padding: 10px;
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 8px;
-        }
-        .bazi-item .label {
-            font-size: 12px;
-            color: #888;
-            margin-bottom: 4px;
-        }
-        .bazi-item .value {
-            font-size: 18px;
-            font-weight: 600;
-            color: #f0e68c;
-        }
-        .info-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-        .info-row .label {
-            color: #888;
-        }
-        .info-row .value {
-            color: #fff;
-        }
-        .section {
-            margin-top: 20px;
-        }
-        .section-title {
-            font-size: 1em;
-            color: #f0e68c;
-            margin-bottom: 12px;
-        }
-        .dayun-list, .liunian-list {
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 8px;
-            padding: 12px;
-        }
-        .dayun-item, .liunian-item {
-            padding: 10px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-        .dayun-item:last-child, .liunian-item:last-child {
-            border-bottom: none;
-        }
-        .dayun-age {
-            font-weight: 600;
-            color: #f0e68c;
-        }
-        .analysis {
-            margin-top: 20px;
-            line-height: 1.8;
-            white-space: pre-wrap;
-            background: rgba(0, 0, 0, 0.3);
-            padding: 16px;
-            border-radius: 8px;
-            max-height: 400px;
-            overflow-y: auto;
-        }
-        .loading {
-            text-align: center;
-            padding: 40px;
-            color: #888;
-        }
-        .loading::after {
-            content: '...';
-            animation: dots 1s infinite;
-        }
-        @keyframes dots {
-            0%, 20% { content: '.'; }
-            40% { content: '..'; }
-            60%, 100% { content: '...'; }
-        }
-    </style>
+    <link rel="stylesheet" href="/static/css/main.css">
 </head>
 <body>
     <div class="container">
         <h1>🔮 算命机器人</h1>
         
-        <div class="form-card">
+        <div class="form-card" role="form" aria-label="算命表单">
             <div class="form-group">
-                <label>出生日期</label>
-                <input type="date" id="birthDate" required>
+                <label for="birthDate">
+                    出生日期
+                    <span class="tooltip" title="请输入公历出生日期">ℹ️</span>
+                </label>
+                <input type="date" id="birthDate" required min="1900-01-01" max="2026-12-31">
+                <small class="hint">支持1900年至今的日期</small>
+                <div class="error-hint" id="birthDateError"></div>
             </div>
             
             <div class="form-group">
-                <label>出生时间</label>
+                <label for="birthTime">
+                    出生时间
+                    <span class="tooltip" title="请选择出生时间，不知道具体时间可选择12:00">ℹ️</span>
+                </label>
                 <input type="time" id="birthTime" required>
+                <small class="hint">请选择出生时间（公历）</small>
+                <div class="error-hint" id="birthTimeError"></div>
             </div>
             
             <div class="form-group">
-                <label>性别</label>
+                <label for="gender">性别</label>
                 <select id="gender">
                     <option value="男">男</option>
                     <option value="女">女</option>
@@ -211,7 +40,7 @@
             </div>
             
             <div class="form-group">
-                <label>想问什么？</label>
+                <label for="questionType">想问什么？</label>
                 <select id="questionType">
                     <option value="事业">事业</option>
                     <option value="姻缘">姻缘</option>
@@ -222,141 +51,13 @@
                 </select>
             </div>
             
-            <button class="btn" onclick="calculate()">开始算命</button>
+            <button class="btn" id="calculateBtn" onclick="calculate()">开始算命</button>
         </div>
         
         <div class="result-card" id="result">
-            <!-- 结果将显示在这里 -->
         </div>
     </div>
 
-    <script>
-        // 设置默认日期为今天
-        document.getElementById('birthDate').value = '1997-04-15';
-        document.getElementById('birthTime').value = '15:00';
-        
-        async function calculate() {
-            const birthDate = document.getElementById('birthDate').value;
-            const birthTime = document.getElementById('birthTime').value;
-            const gender = document.getElementById('gender').value;
-            const questionType = document.getElementById('questionType').value;
-            
-            if (!birthDate || !birthTime) {
-                alert('请填写完整的出生日期和时间');
-                return;
-            }
-            
-            const btn = document.querySelector('.btn');
-            btn.disabled = true;
-            btn.textContent = '算命中...';
-            
-            const resultDiv = document.getElementById('result');
-            resultDiv.classList.remove('show');
-            resultDiv.innerHTML = '<div class="loading">正在分析八字</div>';
-            resultDiv.classList.add('show');
-            
-            try {
-                const response = await fetch('/api/fortune', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        birth_date: birthDate,
-                        birth_time: birthTime,
-                        gender: gender,
-                        question_type: questionType
-                    })
-                });
-                
-                const data = await response.json();
-                
-                if (data.success) {
-                    renderResult(data, questionType);
-                } else {
-                    resultDiv.innerHTML = `<div style="color: #ff6b6b;">算命失败: ${data.error}</div>`;
-                }
-            } catch (error) {
-                resultDiv.innerHTML = `<div style="color: #ff6b6b;">请求失败: ${error.message}</div>`;
-            } finally {
-                btn.disabled = false;
-                btn.textContent = '开始算命';
-            }
-        }
-        
-        function renderResult(data, questionType) {
-            const bazi = data.bazi;
-            const dayun = data.dayun;
-            const liunian = data.liunian;
-            
-            let html = `
-                <div class="result-title">📊 八字分析结果</div>
-                
-                <div class="bazi-grid">
-                    <div class="bazi-item">
-                        <div class="label">年柱</div>
-                        <div class="value">${bazi.year}</div>
-                    </div>
-                    <div class="bazi-item">
-                        <div class="label">月柱</div>
-                        <div class="value">${bazi.month}</div>
-                    </div>
-                    <div class="bazi-item">
-                        <div class="label">日柱</div>
-                        <div class="value">${bazi.day}</div>
-                    </div>
-                    <div class="bazi-item">
-                        <div class="label">时柱</div>
-                        <div class="value">${bazi.hour}</div>
-                    </div>
-                </div>
-                
-                <div class="info-row">
-                    <span class="label">命主</span>
-                    <span class="value">${data.mingshu}</span>
-                </div>
-                <div class="info-row">
-                    <span class="label">喜用神</span>
-                    <span class="value">${data.xiyongshen}</span>
-                </div>
-                <div class="info-row">
-                    <span class="label">五行强度</span>
-                    <span class="value">木:${data.wuxing_strength.木} 火:${data.wuxing_strength.火} 土:${data.wuxing_strength.土} 金:${data.wuxing_strength.金} 水:${data.wuxing_strength.水}</span>
-                </div>
-                
-                <div class="section">
-                    <div class="section-title">📅 大运（20-60岁）</div>
-                    <div class="dayun-list">
-                        ${dayun.map(d => `
-                            <div class="dayun-item">
-                                <span class="dayun-age">${d.age}-${d.age+9}岁</span> 
-                                <span>${d.ganzhi}</span>
-                                <span style="color: #888; font-size: 12px;">(${d.start}-${d.end}年)</span>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-                
-                <div class="section">
-                    <div class="section-title">📆 近三年流年</div>
-                    <div class="liunian-list">
-                        ${liunian.map(l => `
-                            <div class="liunian-item">
-                                <span>${l.year}年</span>
-                                <span style="color: #f0e68c; margin-left: 10px;">${l.ganzhi}</span>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-                
-                <div class="section">
-                    <div class="section-title">✨ ${questionType}分析</div>
-                    <div class="analysis">${data.analysis}</div>
-                </div>
-            `;
-            
-            document.getElementById('result').innerHTML = html;
-        }
-    </script>
+    <script src="/static/js/main.js"></script>
 </body>
 </html>
